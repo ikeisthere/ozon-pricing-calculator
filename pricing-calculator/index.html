@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="免费使用 Ozon 跨境定价计算器，无需登录。按商品类目、采购成本、物流方式和目标利润反推建议售价，并查看费用拆分。">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f4f7fb">
+  <link rel="canonical" href="https://kuakuakua.com/pricing-calculator/">
+  <title>Ozon跨境定价计算器（免费免登录）| 夸夸跨境</title>
+  <link rel="stylesheet" href="../tools/tools.css?v=20260927-brand-1">
+  <link rel="stylesheet" href="./calculator.css?v=20260927-workbench-copy-1">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a class="brand" href="/" aria-label="夸夸跨境首页">
+        <img src="../brand-mark.svg?v=0720-brand-k-radar-1" width="40" height="40" alt="">
+        <span class="brand-copy"><strong class="brand-cn">夸夸跨境</strong><span class="brand-name">OZON跨境卖家工作台</span></span>
+      </a>
+      <button class="menu-button" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
+      <nav id="site-nav" aria-label="主导航">
+        <a href="/">Ozon跨境从0到1</a>
+        <a href="/tools/">工具大全</a>
+        <a href="/pricing-calculator/" aria-current="page">定价计算器</a>
+        <a href="/about.html">工作台介绍</a>
+        <a href="/#support">问题反馈</a>
+        <a class="mobile-nav-link" href="https://ozon.kuakuakua.com/">进入工作台</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="button button-small button-primary desktop-cta" href="https://ozon.kuakuakua.com/">进入工作台</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container calculator-main">
+    <section class="pricing-calc-page" aria-labelledby="calculator-title">
+      <div class="hero pricing-calc-hero"><div class="hero-heading"><h1 id="calculator-title">OZON跨境定价工具</h1><p class="hero-subtitle">根据官方最新佣金列表、物流商最新资费和当日汇率，给出最精准的定价</p></div></div>
+      <div class="pricing-calc-grid">
+        <form id="publicPricingForm" class="panel pricing-calc-form" novalidate>
+          <div class="panel-body pricing-calc-fields">
+            <section class="pricing-calc-group span-4" aria-labelledby="pricingBasicsTitle">
+              <div class="pricing-calc-group-title"><span aria-hidden="true"></span><h2 id="pricingBasicsTitle">基础设置</h2></div>
+              <input id="pricingCalcCategoryPath" type="hidden">
+              <div class="pricing-category-field">
+                <div class="field-label"><span>商品类目（佣金比例） <button class="pricing-help-trigger" type="button" data-pricing-help="category" aria-label="查看商品类目说明" aria-expanded="false">?</button></span><em>*</em></div>
+                <input id="pricingCalcCategorySearch" class="input pricing-category-search" type="search" autocomplete="off" placeholder="搜索或选择商品类目" aria-label="商品类目" role="combobox" aria-expanded="false" aria-controls="pricingCalcCategoryPicker">
+                <button id="pricingCalcCategoryMobileTrigger" class="pricing-category-mobile-trigger" type="button" aria-haspopup="dialog" aria-controls="pricingCalcCategoryMobileDialog" aria-expanded="false"><span id="pricingCalcCategoryMobileValue">搜索或选择商品类目</span><span aria-hidden="true">›</span></button>
+                <div id="pricingCalcCategoryPicker" class="pricing-category-picker" hidden><div id="pricingCalcCategoryColumns" class="pricing-category-columns" aria-live="polite"></div></div>
+                <div id="pricingCalcCategoryMobileDialog" class="pricing-category-mobile-dialog" hidden>
+                  <section class="pricing-category-mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="pricingCalcCategoryMobileTitle">
+                    <header class="pricing-category-mobile-header"><button id="pricingCalcCategoryMobileBack" class="pricing-category-mobile-icon" type="button" aria-label="返回上一级" hidden>‹</button><div><strong id="pricingCalcCategoryMobileTitle">选择商品类目</strong><span id="pricingCalcCategoryMobileCrumb">一级类目</span></div><button id="pricingCalcCategoryMobileClose" class="pricing-category-mobile-icon" type="button" aria-label="关闭类目选择">×</button></header>
+                    <label class="pricing-category-mobile-search-wrap" for="pricingCalcCategoryMobileSearch"><span class="sr-only">搜索商品类目</span><input id="pricingCalcCategoryMobileSearch" type="search" autocomplete="off" placeholder="搜索中文、俄文或类目名称"></label>
+                    <div id="pricingCalcCategoryMobileList" class="pricing-category-mobile-list" aria-live="polite"></div><footer id="pricingCalcCategoryMobileConfirm" class="pricing-category-mobile-confirm" hidden></footer>
+                  </section>
+                </div>
+                <p id="pricingCalcCategoryHint" class="field-hint">售价会自动匹配佣金档位。</p>
+              </div>
+              <div class="pricing-calc-row pricing-calc-row-two">
+                <label class="field"><span>采购成本（¥） <button class="pricing-help-trigger" type="button" data-pricing-help="purchase-cost" aria-label="查看采购成本说明" aria-expanded="false">?</button></span><input id="pricingCalcCostCny" class="input" type="number" min="0.01" max="1000000" step="0.01" value="50" required></label>
+                <label class="field"><span>期望利润 <button class="pricing-help-trigger" type="button" data-pricing-help="expected-profit" aria-label="查看期望利润说明" aria-expanded="false">?</button></span><div class="pricing-input-combo"><select id="pricingCalcProfitMode" class="select" aria-label="期望利润方式"><option value="margin">百分比</option><option value="fixed">固定金额</option></select><input id="pricingCalcTargetProfit" class="input" type="number" min="0" max="1000000" step="any" value="20" aria-label="期望利润数值" required><span id="pricingCalcProfitUnit">%</span></div></label>
+              </div>
+              <div class="pricing-calc-row pricing-package-row">
+                <label class="field"><span>包裹重量（g） <button class="pricing-help-trigger" type="button" data-pricing-help="package-weight" aria-label="查看包裹重量说明" aria-expanded="false">?</button></span><input id="pricingCalcWeightG" class="input" type="number" min="1" max="30000" step="1" value="300" required></label>
+                <div class="pricing-dimension-group"><span class="field-label pricing-dimension-label">包裹体积 <button class="pricing-help-trigger" type="button" data-pricing-help="package-volume" aria-label="查看包裹体积说明" aria-expanded="false">?</button></span><div><label class="sr-only" for="pricingCalcLengthCm">长（cm）</label><input id="pricingCalcLengthCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="20" required><small>cm</small></div><b>×</b><div><label class="sr-only" for="pricingCalcWidthCm">宽（cm）</label><input id="pricingCalcWidthCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="20" required><small>cm</small></div><b>×</b><div><label class="sr-only" for="pricingCalcHeightCm">高（cm）</label><input id="pricingCalcHeightCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="10" required><small>cm</small></div></div>
+              </div>
+              <p id="pricingCalcDimensionError" class="pricing-dimension-error" role="alert" hidden></p><p id="pricingCalcInputError" class="pricing-dimension-error" role="alert" hidden></p>
+            </section>
+            <section class="pricing-calc-group span-4" aria-labelledby="pricingLogisticsTitle">
+              <div class="pricing-calc-group-title"><span aria-hidden="true"></span><h2 id="pricingLogisticsTitle">其他设置</h2></div>
+              <div class="pricing-calc-row pricing-calc-row-two pricing-logistics-scope-row"><label class="field"><span>配送国家 <button class="pricing-help-trigger" type="button" data-pricing-help="destination-country" aria-label="查看配送国家说明" aria-expanded="false">?</button></span><select id="pricingCalcCountry" class="select"><option value="ru">俄罗斯</option><option value="kz">哈萨克斯坦</option><option value="by">白俄罗斯</option><option value="kg">吉尔吉斯斯坦</option></select></label><label class="field"><span>履约方式 <button class="pricing-help-trigger" type="button" data-pricing-help="fulfillment" aria-label="查看履约方式说明" aria-expanded="false">?</button></span><select id="pricingCalcFulfillment" class="select"><option value="rfbs">rFBS</option><option value="fbp">FBP</option></select></label></div>
+              <div class="pricing-calc-row pricing-calc-row-two"><label class="field"><span>跨境物流商 <button class="pricing-help-trigger" type="button" data-pricing-help="logistics-provider" aria-label="查看跨境物流商说明" aria-expanded="false">?</button></span><select id="pricingCalcProvider" class="select"><option value="cel">CEL</option></select></label><label class="field"><span>物流渠道 <button class="pricing-help-trigger" type="button" data-pricing-help="logistics-channel" aria-label="查看物流渠道说明" aria-expanded="false">?</button></span><select id="pricingCalcChannel" class="select"><option value="standard">Standard 标准</option></select></label></div>
+              <p id="pricingCalcLogisticsStatus" class="field-hint pricing-logistics-status" role="status" aria-live="polite">正在加载官方物流服务列表…</p>
+              <div class="pricing-calc-row pricing-calc-row-three"><label class="field"><span>国内运费+代贴单（¥） <button class="pricing-help-trigger" type="button" data-pricing-help="domestic-cost" aria-label="查看国内运费加代贴单说明" aria-expanded="false">?</button></span><input id="pricingCalcDomesticCost" class="input" type="number" min="0" max="1000000" step="0.01" value="0"></label><label class="field"><span>广告费占比（%） <button class="pricing-help-trigger" type="button" data-pricing-help="advertising-rate" aria-label="查看广告费占比说明" aria-expanded="false">?</button></span><input id="pricingCalcPromoRate" class="input" type="number" min="0" max="80" step="0.5" value="0"></label><label class="field"><span>其他成本（%） <button class="pricing-help-trigger" type="button" data-pricing-help="other-cost" aria-label="查看其他成本说明" aria-expanded="false">?</button></span><input id="pricingCalcOtherCost" class="input" type="number" min="0" max="80" step="0.01" value="1.2"></label></div>
+              <div class="pricing-calc-row pricing-calc-row-two"><label class="field pricing-fx-field"><span>今日汇率：1 元 = ₽ <button class="pricing-help-trigger" type="button" data-pricing-help="exchange-rate" aria-label="查看今日汇率说明" aria-expanded="false">?</button></span><span class="pricing-fx-control"><input id="pricingCalcFx" class="input" type="number" min="0.0001" max="1000" step="0.0001" value="12.5" required><small id="pricingCalcFxMeta" class="pricing-fx-meta">正在更新今日参考汇率</small></span></label></div>
+            </section>
+            <button id="calculateButton" class="button primary pricing-calc-submit span-4" type="submit">开始计算</button>
+          </div>
+        </form>
+        <aside class="pricing-calc-result-stack"><div id="resultPanel" class="panel-body" aria-live="polite"><div class="empty"><strong>先选择商品类目</strong><p>选好类目并填完成本后，系统会直接反推出应售价格。</p></div></div></aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-about">
+        <a class="brand footer-brand" href="/">
+          <img src="../brand-mark.svg?v=0720-brand-k-radar-1" width="36" height="36" alt="">
+          <span class="brand-copy"><strong class="brand-cn">夸夸跨境</strong><span class="brand-name">OZON跨境卖家工作台</span></span>
+        </a>
+        <p>坚持为 OZON 中国卖家提供专业、稳定的数据服务。</p>
+      </div>
+      <div><b>产品与指南</b><a href="/about.html">关于夸夸跨境</a><a href="/about.html#features">核心功能</a><a href="/about.html#pricing">会员方案</a><a href="https://ozon.kuakuakua.com/">工作台入口</a><a href="/guides/">Ozon 实用指南</a><a href="/guides/ozon-api-keys.html">API 授权说明</a></div>
+      <div><b>支持</b><a href="mailto:support@kuakuakua.com">邮件支持</a><a href="https://ozon.kuakuakua.com/terms.html">用户服务协议</a><a href="https://ozon.kuakuakua.com/privacy.html">隐私政策</a></div>
+      <div><b>工具</b><a href="/pricing-calculator/">Ozon 跨境定价计算器</a><span>覆盖 rFBS、FBP 与俄罗斯及独联体市场</span></div>
+    </div>
+    <div class="container copyright"><span>© 2026 KuaKuaKua. 保留所有权利。</span></div>
+  </footer>
+
+  <script src="../tools/tools.js" defer></script>
+  <script src="./calculator.js?v=20260927-workbench-copy-2" defer></script>
+</body>
+</html>

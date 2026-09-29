@@ -1,0 +1,195 @@
+.calculator-main {
+  width: min(calc(100% - 40px), 1240px);
+  max-width: 1240px;
+  padding: 18px 0 44px;
+}
+.pricing-calc-page {
+  --blue: #2563eb;
+  --blue-2: #1d4ed8;
+  --ink: #263750;
+  --line: #dce5f0;
+  color: var(--ink);
+}
+.pricing-calc-hero {
+  display: flex;
+  min-height: 110px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 16px;
+  padding: 22px 28px;
+  border-radius: 16px;
+  background: linear-gradient(110deg, #1d4ed8 0%, #2563eb 56%, #4d9cf7 100%);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, .16);
+}
+.pricing-calc-hero h1 { margin: 0; color: #fff; font-size: 28px; font-weight: 850; line-height: 1.2; }
+.pricing-calc-hero .hero-subtitle { margin: 8px 0 0; color: rgba(255,255,255,.92); font-size: 14px; }
+.pricing-calc-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr); align-items: start; gap: 16px; }
+.pricing-calc-form,
+.pricing-calc-result-stack > .panel,
+.pricing-calc-result-stack > .panel-body > .panel {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(25, 57, 102, .06);
+}
+.pricing-calc-fields { display: block; padding: 20px 22px 24px; }
+.pricing-calc-group { display: grid; gap: 16px; padding: 0 0 24px; border-bottom: 0; }
+.pricing-calc-group + .pricing-calc-group { padding-top: 22px; border-top: 1px solid #e7edf5; }
+.pricing-calc-group-title { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
+.pricing-calc-group-title > span,
+.pricing-calc-card-title > span { width: 4px; height: 20px; border-radius: 4px; background: var(--blue); }
+.pricing-calc-group-title h2,
+.pricing-calc-card-title h2 { margin: 0; color: #1d2940; font-size: 16px; font-weight: 800; }
+.field-label { display: flex; align-items: center; gap: 4px; margin-bottom: 7px; color: var(--ink); font-size: 13px; font-weight: 700; }
+.field-label em { color: #e5484d; font-style: normal; }
+.field { display: block; min-width: 0; color: var(--ink); font-size: 13px; font-weight: 650; }
+.pricing-calc-page .input,
+.pricing-calc-page .select,
+.pricing-category-search {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #cbd8e8;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  box-shadow: inset 0 1px 1px rgba(26, 61, 108, .03);
+}
+.pricing-calc-page .input:focus,
+.pricing-calc-page .select:focus,
+.pricing-category-search:focus { border-color: var(--blue); outline: 0; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+.pricing-calc-row { display: grid; gap: 14px; margin-top: 16px; }
+.pricing-calc-row-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pricing-calc-row-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pricing-package-row { grid-template-columns: minmax(150px, .72fr) minmax(0, 1.28fr); align-items: end; }
+.pricing-input-combo { display: grid; grid-template-columns: minmax(105px, .45fr) minmax(0, 1fr) 34px; overflow: hidden; border: 1px solid #cbd8e8; border-radius: 10px; background: #fff; }
+.pricing-input-combo .select,
+.pricing-input-combo .input { border: 0; border-radius: 0; box-shadow: none; }
+.pricing-input-combo > span { display: grid; place-items: center; color: #526985; }
+.pricing-dimension-group { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 8px; }
+.pricing-dimension-group > .field-label { grid-column: 1/-1; margin: 0; }
+.pricing-dimension-group > div { position: relative; min-width: 0; }
+.pricing-dimension-group input { padding-right: 36px; }
+.pricing-dimension-group small { position: absolute; top: 50%; right: 9px; color: #8291a5; font-size: 11px; transform: translateY(-50%); }
+.pricing-dimension-group > b { padding-bottom: 13px; color: #8b9bb0; }
+.pricing-logistics-status,.field-hint { margin: 0; color: #75849a; font-size: 12px; line-height: 1.5; }
+.pricing-dimension-error { margin: 0; padding: 10px 12px; border: 1px solid #ffc9c5; border-radius: 9px; background: #fff5f5; color: #b42318; font-size: 12px; line-height: 1.5; }
+.pricing-calc-page .input-error { border-color: #e5484d !important; box-shadow: 0 0 0 3px rgba(229,72,77,.1) !important; }
+.pricing-fx-control { display: grid; grid-template-columns: minmax(150px, .55fr) minmax(0, 1fr); align-items: center; gap: 10px; }
+.pricing-fx-meta { color: #75849a; font-size: 11px; }
+.pricing-category-field { position: relative; }
+.pricing-category-search { display: block; }
+.pricing-category-picker { position: absolute; z-index: 35; top: calc(100% + 8px); left: 0; width: min(780px, calc(100vw - 40px)); overflow: hidden; border: 1px solid #cbd8e8; border-radius: 12px; background: #fff; box-shadow: 0 18px 44px rgba(26,61,108,.16); }
+.pricing-category-columns { display: grid; grid-template-columns: .82fr 1fr 1.3fr; height: min(440px, calc(100dvh - 220px)); min-height: 300px; max-height: 440px; overflow: hidden; }
+.pricing-category-column { min-height: 0; overflow: auto; overscroll-behavior: contain; border-right: 1px solid #edf2fa; scrollbar-color: #8ba7cb #edf3fb; }
+.pricing-category-column:last-child { border-right: 0; }
+.pricing-category-column h3 { position: sticky; top: 0; z-index: 1; margin: 0; padding: 11px 12px 8px; background: #fff; color: #526985; font-size: 12px; font-weight: 800; }
+.pricing-category-option { display: block; width: 100%; padding: 9px 12px; border: 0; background: transparent; color: #334866; font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+.pricing-category-option:hover,.pricing-category-option.active { background: #eaf1ff; color: #185bd2; }
+.pricing-category-option.active { font-weight: 700; }
+.pricing-category-option small { display: block; margin-top: 3px; color: #8090a6; font-size: 11px; font-weight: 400; }
+.pricing-category-search-results { grid-column: 1/-1; }
+.pricing-category-mobile-trigger,.pricing-category-mobile-dialog { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.pricing-help-trigger { display: inline-flex; width: 18px; min-width: 18px; height: 18px; min-height: 18px; align-items: center; justify-content: center; margin: 0 0 0 4px; padding: 0; border: 1px solid #aeb8c5; border-radius: 50%; background: transparent; color: #8492a6; font: 600 10px Arial,sans-serif; cursor: help; }
+.pricing-help-popover { position: fixed; z-index: 1400; width: min(288px, calc(100vw - 24px)); padding: 11px 13px; border: 1px solid #d7e1ee; border-left: 3px solid var(--blue); border-radius: 9px; background: #fff; box-shadow: 0 12px 30px rgba(26,61,108,.16); color: #334155; font-size: 12px; line-height: 1.6; pointer-events: none; }
+.pricing-help-popover[hidden], [hidden] { display: none !important; }
+.pricing-calc-submit { width: 100%; min-height: 46px; margin-top: 8px; padding: 10px; border: 1px solid var(--blue); border-radius: 10px; background: var(--blue); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+.pricing-calc-page .pricing-calc-submit { color: #fff; }
+.pricing-calc-submit:hover { background: #1d4ed8; }
+.pricing-calc-submit:disabled { cursor: wait; opacity: .7; }
+.pricing-calc-result-stack { display: grid; gap: 16px; }
+.pricing-calc-result-stack > .panel-body { display: grid; gap: 16px; padding: 0; }
+.pricing-calc-result-stack .panel { padding: 20px; }
+.pricing-calc-result-card { position: relative; border: 2px solid #7da8f8 !important; background: linear-gradient(135deg,#f2f7ff 0%,#fff 68%) !important; box-shadow: 0 18px 38px rgba(37,99,235,.14) !important; }
+.pricing-calc-result-card::before { position: absolute; inset: 0 auto 0 0; width: 5px; border-radius: 12px 0 0 12px; background: var(--blue); content: ""; }
+.pricing-calc-card-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.pricing-calc-result-card .pricing-calc-card-title { margin-bottom: 22px; }
+.pricing-calc-result-card .pricing-calc-card-title h2 { color: #143b83; font-size: 17px; }
+.pricing-calc-result-pair { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(150px,.55fr); align-items: end; gap: 22px; }
+.pricing-calc-result-pair > div { min-width: 0; }
+.pricing-calc-result-pair > div + div { padding-left: 24px; border-left: 1px solid #e1e8f2; }
+.pricing-calc-result-pair span { display: block; margin-bottom: 8px; color: #5a6c86; font-size: 13px; }
+.pricing-calc-primary-metric > strong { display: block; color: var(--blue); font-size: clamp(34px,3.1vw,56px); font-weight: 900; line-height: 1.1; letter-spacing: -.045em; }
+.pricing-calc-secondary-metric > strong { display: block; color: #2f3748; font-size: 30px; font-weight: 800; line-height: 1.1; }
+@media (max-width: 1600px) { .pricing-calc-secondary-metric > strong { font-size: 24px; white-space: nowrap; } }
+.pricing-calc-result-pair strong.negative { color: #ef4444; }
+.pricing-calc-result-pair small,.pricing-calc-rate-line,.pricing-calc-match-note { display: block; margin-top: 8px; color: #7b8aa1; font-size: 13px; line-height: 1.5; }
+.pricing-calc-rate-line { margin: 22px 0 0; padding-top: 14px; border-top: 1px solid #dce7f7; color: #60738f; }
+.pricing-calc-match-note { margin: -8px 0 14px; padding: 11px 13px; border: 1px solid #d8e5f7; border-radius: 10px; background: #f3f7fd; color: #425b7a; }
+.pricing-calc-shipping-options { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.pricing-calc-shipping-option { position: relative; min-height: 128px; padding: 20px 12px 16px; border: 1px solid #d7e1ed; border-radius: 12px; background: #fbfdff; color: var(--ink); text-align: left; cursor: pointer; }
+.pricing-calc-shipping-option.active { border-color: var(--blue); background: #eef4ff; box-shadow: inset 0 0 0 1px var(--blue),0 8px 18px rgba(37,99,235,.1); }
+.pricing-calc-shipping-option b { position: absolute; top: -10px; left: 50%; padding: 2px 8px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 11px; white-space: nowrap; transform: translateX(-50%); }
+.pricing-calc-shipping-option span { display: block; color: var(--blue); font-size: 16px; font-weight: 800; }
+.pricing-calc-shipping-option em { display: block; margin-top: 4px; color: #64748b; font-size: 11px; font-style: normal; font-weight: 700; }
+.pricing-calc-shipping-option strong { display: block; margin-top: 16px; color: #0f172a; font-size: 22px; }
+.pricing-calc-shipping-option small { display: block; margin-top: 12px; color: #697a93; }
+.pricing-calc-detail-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.pricing-calc-detail-group { min-width: 0; padding: 0 12px 8px; border: 1px solid #dce5f0; border-radius: 12px; background: #fbfdff; }
+.pricing-calc-detail-group h3 { margin: 0 -12px; padding: 12px; border-bottom: 1px solid #dce5f0; background: #f4f8fd; color: var(--ink); font-size: 14px; }
+.pricing-calc-detail-row { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid #edf1f7; color: #35465f; font-size: 12px; }
+.pricing-calc-detail-row strong { color: #0f172a; white-space: nowrap; }
+.pricing-calc-detail-row .pricing-help-trigger { width: 16px; min-width: 16px; height: 16px; min-height: 16px; }
+.pricing-calc-source-note { display: grid; grid-template-columns: 1fr; margin-top: 16px; padding: 14px; border: 1px solid #dce5f0; border-radius: 12px; background: #f6f9fd; }
+.pricing-calc-source-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pricing-calc-source-header strong,.pricing-calc-source-header small { display: block; }
+.pricing-calc-source-header small { margin-top: 3px; color: #75849a; }
+.pricing-calc-official-link { color: var(--blue); font-size: 12px; font-weight: 750; text-decoration: none; white-space: nowrap; }
+.pricing-calc-source-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+.pricing-calc-source-item { display: grid; gap: 3px; padding: 10px; border-top: 1px solid #dfe8f4; font-size: 11px; }
+.pricing-calc-source-item span,.pricing-calc-source-item small { color: #75849a; }
+.pricing-calc-source-item strong { color: var(--ink); font-size: 12px; }
+.pricing-calc-result-stack .empty,.pricing-calc-result-stack [role=alert] { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: #334866; }
+.pricing-calc-result-stack [role=alert] { border-color: #ffc9c5; background: #fff6f5; }
+.pricing-calc-result-stack [role=alert] p { margin-bottom: 0; }
+@media (max-width: 1180px) { .pricing-calc-grid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) {
+  .calculator-main { width: calc(100% - 28px); padding-top: 12px; }
+  .pricing-calc-hero { min-height: 94px; margin-bottom: 12px; padding: 18px; border-radius: 13px; }
+  .pricing-calc-hero h1 { font-size: 22px; }
+  .pricing-calc-hero .hero-subtitle { font-size: 12px; }
+  .pricing-calc-grid { grid-template-columns: minmax(0,1fr); gap: 12px; }
+  .pricing-calc-fields { padding: 16px; }
+  .pricing-calc-row-two,.pricing-calc-row-three,.pricing-package-row { grid-template-columns: 1fr; }
+  .pricing-category-search,.pricing-category-picker { display: none !important; }
+  .pricing-category-mobile-trigger { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid #cbd8e8; border-radius: 10px; background: #fff; color: #50627d; font: inherit; font-size: 16px; text-align: left; }
+  .pricing-category-mobile-trigger > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pricing-category-mobile-trigger > span:last-child { color: var(--blue); font-size: 28px; }
+  .pricing-category-mobile-dialog:not([hidden]) { position: fixed; z-index: 220; inset: 0; display: flex; align-items: flex-end; background: rgba(15,35,70,.46); }
+  .pricing-category-mobile-sheet { display: grid; width: 100%; height: 100dvh; grid-template-rows: auto auto minmax(0,1fr) auto; overflow: hidden; border-radius: 0; background: #fff; }
+  .pricing-category-mobile-header { position: relative; display: flex; min-height: 64px; align-items: center; justify-content: center; padding: max(8px,env(safe-area-inset-top)) 12px 8px; border-bottom: 1px solid #e6edf7; }
+  .pricing-category-mobile-header > div { width: min(calc(100% - 112px),260px); text-align: center; }
+  .pricing-category-mobile-header strong,.pricing-category-mobile-header span { display: block; }
+  .pricing-category-mobile-header strong { color: var(--ink); font-size: 17px; }
+  .pricing-category-mobile-header span { overflow: hidden; margin-top: 2px; color: #7788a0; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+  .pricing-category-mobile-icon { position: absolute; top: 50%; width: 44px; height: 44px; border: 0; background: transparent; color: #355072; font-size: 30px; transform: translateY(-50%); }
+  .pricing-category-mobile-header > .pricing-category-mobile-icon:first-child { left: 12px; }
+  .pricing-category-mobile-header > .pricing-category-mobile-icon:last-child { right: 12px; }
+  .pricing-category-mobile-search-wrap { display: block; padding: 12px 16px; border-bottom: 1px solid #edf2f8; }
+  .pricing-category-mobile-search-wrap input { box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid #cbd8e8; border-radius: 10px; background: #f8fbff; font: inherit; font-size: 16px; }
+  .pricing-category-mobile-list { min-height: 0; overflow-y: auto; padding: 4px 16px calc(16px + env(safe-area-inset-bottom)); }
+  .pricing-category-mobile-section-title { margin: 12px 0 6px; color: #6e809a; font-size: 13px; font-weight: 800; }
+  .pricing-category-mobile-option { display: grid; width: 100%; min-height: 56px; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; padding: 10px 4px; border: 0; border-bottom: 1px solid #edf2f8; background: #fff; color: #233b5b; font: inherit; font-size: 16px; text-align: left; }
+  .pricing-category-mobile-option small { display: block; margin-top: 3px; color: #7788a0; font-size: 12px; }
+  .pricing-category-mobile-option > b { color: #6380a4; font-size: 24px; font-weight: 400; }
+  .pricing-category-mobile-option.active { color: #185bd2; }
+  .pricing-category-mobile-confirm { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; padding: 12px 16px max(12px,env(safe-area-inset-bottom)); border-top: 1px solid #dce6f3; background: #fff; }
+  .pricing-category-mobile-confirm strong { display: block; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+  .pricing-category-mobile-confirm button { min-height: 44px; padding: 0 14px; border: 0; border-radius: 10px; background: var(--blue); color: #fff; font-weight: 800; }
+  body.pricing-category-mobile-open { overflow: hidden; }
+  .pricing-fx-control { grid-template-columns: 1fr; }
+  .pricing-calc-result-pair { grid-template-columns: minmax(0,1fr) minmax(115px,.6fr); gap: 14px; }
+  .pricing-calc-result-pair > div + div { padding-left: 14px; }
+  .pricing-calc-primary-metric > strong { font-size: clamp(36px,11vw,52px); }
+  .pricing-calc-secondary-metric > strong { font-size: 25px; white-space: nowrap; }
+  .pricing-calc-shipping-options { display: flex; overflow-x: auto; padding: 8px 3px 4px; }
+  .pricing-calc-shipping-option { min-width: min(78vw,280px); }
+  .pricing-calc-detail-list,.pricing-calc-source-grid { grid-template-columns: 1fr; }
+  .pricing-calc-result-stack .panel { padding: 16px; }
+}
