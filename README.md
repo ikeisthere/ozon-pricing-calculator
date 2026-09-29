@@ -1,56 +1,51 @@
 # Ozon 跨境定价计算器
 
-面向中国 Ozon 卖家的免费免登录定价工具。输入商品类目、采购成本、包裹信息、履约与物流选项和目标利润，查看建议售价及费用拆分。
+这是一个可独立运行、可自行部署和修改的 Ozon 跨境定价计算器开源项目。页面、计算引擎、随包费率目录及本地 API 都在本仓库内；运行时不依赖夸夸跨境工作台、账号、API Key 或官网 API。
 
-**在线体验：**[夸夸跨境 Ozon 跨境定价计算器](https://kuakuakua.com/pricing-calculator/)
+## 快速运行
 
-## 功能
+需要 Node.js 18 或更新版本。无需安装第三方依赖：
 
-- 按商品类目和履约方式匹配佣金。
-- 根据商品成本和目标利润反推售价。
-- 选择配送国家、履约方式、跨境物流商与渠道，查看费用估算。
-- 桌面端三级类目浏览、移动端类目搜索和最近使用记录。
-- 输入有效后自动更新结果，无需每次点击计算按钮。
-
-## 数据与服务依赖
-
-页面从夸夸跨境工作台的公开定价 API 读取类目、物流费率、汇率及计算结果；本仓库不包含 Ozon 店铺凭证、API Key 或用户数据，也不内置费率快照。费率和汇率会变化，计算结果仅供经营测算；刊登或改价前，请在 Ozon Seller 核对当时规则和费用。
-
-本地静态预览可以用 Python 启动：
-
-```powershell
-python -m http.server 8080
+```sh
+node server/app.js
 ```
 
-打开 `http://127.0.0.1:8080/pricing-calculator/`。完整交互预览需要本机工作台 API 正在 `127.0.0.1:18084` 运行；本仓库不包含工作台后端。正式使用请通过上方官网入口。
+浏览器打开 <http://127.0.0.1:8080/>。如需改端口，可设置 `PORT` 环境变量。汇率服务需要联网访问俄罗斯央行；如果暂时不可用，可以在页面手动输入汇率。佣金与物流费率使用仓库内标有版本日期的目录，不会在后台自动替换。
 
-离线结构与脚本检查：
+## 项目包含什么
 
-```powershell
-node --test tests/*.test.mjs
+- `pricing-calculator/`：计算器页面、交互和样式。
+- `server/app.js`：轻量本地 API 与静态页面服务，只用 Node.js 内置模块。
+- `server/pricing-engine.js`、`server/pricing-catalog.js`：售价反推、成本拆分、约束校验和费率读取逻辑。
+- `server/data/`：随项目提供的佣金与物流费率目录。来源、版本、更新时间和已知限制见 [`DATA-SOURCES.md`](./DATA-SOURCES.md)。
+- `tools/`、`brand-mark.svg`：页面所需的样式、导航脚本和品牌图形。品牌图形不属于 MIT 代码许可，见 [`NOTICE.md`](./NOTICE.md)。
+
+## 费率与计算结果
+
+费率会随 Ozon 政策和承运线路调整。本项目提供的是带版本日期的费率快照，不承诺始终是最新费率。人民币兑卢布参考汇率从俄罗斯央行公开日汇率读取，并显示报价日期；它不是卖家实际结算汇率。最终刊登或调价前，请在 Ozon Seller 和实际物流合同中复核费用。
+
+计算结果是经营测算，不构成 Ozon 官方报价或收益保证。修改费率目录时，请一并更新 [`DATA-SOURCES.md`](./DATA-SOURCES.md) 中的出处与生效日期。
+
+佣金和物流数据是第三方来源的费率快照，不属于 MIT 许可的代码。部分原始工作簿或下载链接目前未包含在仓库中，数据转换也未完全做到可复现；具体范围见 [`DATA-SOURCES.md`](./DATA-SOURCES.md)。
+
+## 开发与验证
+
+```sh
+node --test tests/*.test.mjs server/tests/*.test.js
 ```
 
-## 项目结构
+也可只检查核心计算引擎：
 
-- `pricing-calculator/`：计算器页面、样式和交互。
-- `tools/tools.css`、`tools/tools.js`：官网共享页头、导航和页脚样式/交互依赖。
-- `brand-mark.svg`：官网品牌标识资源（不包含在代码许可授权内，见 `NOTICE.md`）。
-- `scripts/sync-from-homepage.ps1`：从官网真源按白名单同步文件；不会复制主站其他页面、部署材料或 Git 历史。
-
-## 维护与贡献
-
-官网生产代码的唯一真源是 [`kuakuakua-homepage`](https://github.com/ikeisthere/kuakuakua-homepage) 仓库。本仓库是经过筛选的公开源码镜像，不是生产部署仓库。功能修改先在官网真源完成并验证，再运行同步脚本更新本仓库；来自本仓库的 Issue/PR 建议由维护者评估后回到官网真源实现，避免两份代码分别演进。
-
-同步命令（在本仓库 PowerShell 中运行）：
-
-```powershell
-./scripts/sync-from-homepage.ps1
+```sh
+node --test server/tests/pricing-engine.test.js
 ```
 
-## License
+贡献指南见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。欢迎提交问题和改进 PR；经审查合并的改进会进入本项目，供所有使用者获取。若改动需要同步到夸夸跨境线上计算器，项目维护者会另行安排，不影响本仓库作为独立开源项目的使用和贡献。
 
-计算器软件代码采用 MIT License，见 [`LICENSE`](./LICENSE)。夸夸跨境名称、商标和品牌标识不随该许可授权，详见 [`NOTICE.md`](./NOTICE.md)。
+## 许可
+
+软件代码采用 MIT License，见 [`LICENSE`](./LICENSE)。Ozon 名称仅用于说明兼容对象；Ozon 商标及第三方费率资料不因此转授许可。夸夸跨境名称与标识的使用边界见 [`NOTICE.md`](./NOTICE.md)。
 
 ---
 
-English: A free Ozon cross-border pricing calculator for Chinese sellers. [Try the official web version](https://kuakuakua.com/pricing-calculator/). The production implementation lives in the KuaKuaKua homepage repository; this repository is a curated source mirror, not a deployment target.
+English: An independently runnable, open-source Ozon cross-border pricing calculator. It includes the UI, calculation engine, versioned data snapshots, and a local API. See [`DATA-SOURCES.md`](./DATA-SOURCES.md) for provenance and limitations.

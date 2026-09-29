@@ -1,0 +1,14 @@
+{
+  "name": "ozon-pricing-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Independently runnable open-source Ozon cross-border pricing calculator",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/app.js",
+    "test": "node --test tests/*.test.mjs server/tests/*.test.js"
+  }
+}

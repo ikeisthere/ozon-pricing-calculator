@@ -145,6 +145,8 @@
 .pricing-calc-source-item { display: grid; gap: 3px; padding: 10px; border-top: 1px solid #dfe8f4; font-size: 11px; }
 .pricing-calc-source-item span,.pricing-calc-source-item small { color: #75849a; }
 .pricing-calc-source-item strong { color: var(--ink); font-size: 12px; }
+.pricing-calc-source-item a { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--blue); text-decoration: none; }
+.pricing-calc-source-item a span { flex: none; color: var(--blue); }
 .pricing-calc-result-stack .empty,.pricing-calc-result-stack [role=alert] { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: #334866; }
 .pricing-calc-result-stack [role=alert] { border-color: #ffc9c5; background: #fff6f5; }
 .pricing-calc-result-stack [role=alert] p { margin-bottom: 0; }
