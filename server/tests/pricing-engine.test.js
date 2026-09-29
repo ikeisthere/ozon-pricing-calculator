@@ -98,6 +98,7 @@ test("input validation rejects zero/negative commercial values but allows zero p
 test("country-specific catalog ceilings and fulfillment availability are enforced", () => {
   const cases = [
     ["ru", "rfbs", "cel", "standard", 250000],
+    ["kz", "rfbs", "ural", "standard", 250000],
     ["kz", "fbp", "guoo", "standard", 18000],
     ["by", "rfbs", "ural", "standard", 18000],
     ["kg", "rfbs", "yx", "standard", 18000]

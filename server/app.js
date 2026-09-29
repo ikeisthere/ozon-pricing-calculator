@@ -19,10 +19,10 @@ let cachedRate = null;
 const CBR_URL = "https://www.cbr.ru/scripts/XML_daily.asp";
 const RATE_CACHE_MS = 6 * 60 * 60 * 1000;
 const PRICING_SOURCE_URLS = {
-  commission: "https://docs.ozon.ru/global/zh/",
+  commission: "https://cdn.ozone.ru/s3/ozon-disk-api/global-education/ru/commissions/ozon-fees/comissions/Tarifs_CN_01_12_2025_1761720496.xlsx",
   "rfbs-ru": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/China_scoring_ENG_CN_24_07_26_1784197567.xlsx",
   fbp: "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/FBP_List_of_services_24_07_26_1784197567.xlsx",
-  "rfbs-cis": "https://docs.ozon.ru/global/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/"
+  "rfbs-cis": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx"
 };
 
 async function getExchangeRate() {
