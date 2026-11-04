@@ -71,7 +71,7 @@ test("official logistics group is fixed by sale value and actual weight; size ca
 
 test("unsupported, overweight, oversize and over-ceiling requests never return a price", () => {
   throwsCode({ ...base, country: "kg", fulfillment: "fbp" }, "ROUTE_UNAVAILABLE");
-  throwsCode({ ...base, weightG: 30001 }, "INVALID_INPUT");
+  throwsCode({ ...base, weightG: 30001 }, "WEIGHT_LIMIT_EXCEEDED");
   throwsCode({ ...base, lengthCm: 1000, widthCm: 1000, heightCm: 1000 }, "SIZE_LIMIT");
   throwsCode({ ...base, costCny: 1_000_000, targetProfit: 1_000_000 }, "SALE_LIMIT_EXCEEDED");
 });
@@ -109,6 +109,46 @@ test("country-specific catalog ceilings and fulfillment availability are enforce
     assert.ok(result.recommended.saleRub <= ceiling);
   }
   throwsCode({ ...base, country: "kg", fulfillment: "fbp", provider: "guoo", channel: "economy" }, "ROUTE_UNAVAILABLE");
+});
+
+test("OGL uses rFBS commission rates, volumetric weight, and its 35 kg limit", () => {
+  const result = calculatePricing({ ...base, fulfillment: "ogl", provider: "ogl", channel: "standard", weightG: 3000, lengthCm: 60, widthCm: 40, heightCm: 30, costCny: 200, targetProfit: 0 });
+  assert.equal(result.recommended.logistics.method, "OGL Big");
+  assert.equal(result.recommended.logistics.chargeWeightKg, 6);
+  assert.ok(result.recommended.profitCny >= -0.000001);
+  assert.equal(result.recommended.fees.commissionRate, category.rfbs[1] / 100);
+  const heavy = calculatePricing({ ...base, fulfillment: "ogl", provider: "ogl", channel: "standard", weightG: 35000, targetProfit: 0 });
+  assert.equal(heavy.recommended.logistics.method, "OGL Premium Big");
+  assert.throws(() => calculatePricing({ ...base, fulfillment: "ogl", provider: "ogl", channel: "standard", weightG: 35001 }), (error) => error instanceof PricingError && error.code === "WEIGHT_LIMIT_EXCEEDED" && error.details.field === "weightG");
+});
+
+test("postal routes use actual weight and enforce per-route battery, liquid, size, and weight limits", () => {
+  const standard = calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-standard", weightG: 300, targetProfit: 0 });
+  assert.equal(standard.recommended.logistics.feeCny, 22);
+  assert.equal(standard.recommended.logistics.chargeWeightKg, 0.3);
+  assert.ok(standard.recommended.profitCny >= -0.000001);
+  assert.equal(standard.recommended.logistics.requirements.batteriesAllowed, false);
+  assert.equal(standard.recommended.logistics.requirements.liquidsAllowed, false);
+
+  const batteryAllowed = calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-economy", weightG: 300, containsBattery: true, targetProfit: 0 });
+  assert.equal(batteryAllowed.recommended.logistics.requirements.batteriesAllowed, true);
+  assert.throws(() => calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-standard", weightG: 300, containsBattery: true }), (error) => error instanceof PricingError && error.code === "ITEM_RESTRICTION" && error.details.field === "containsBattery");
+  assert.throws(() => calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-economy", weightG: 300, containsLiquid: true }), (error) => error instanceof PricingError && error.code === "ITEM_RESTRICTION" && error.details.field === "containsLiquid");
+  assert.throws(() => calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-standard", weightG: 300, lengthCm: 60, widthCm: 20, heightCm: 10 }), (error) => error instanceof PricingError && error.code === "SIZE_LIMIT" && error.details.field === "dimensions");
+  assert.throws(() => calculatePricing({ ...base, fulfillment: "postal", provider: "china-post", channel: "ru-ozon-standard", weightG: 501 }), (error) => error instanceof PricingError && error.code === "WEIGHT_LIMIT_EXCEEDED" && error.details.field === "weightG");
+});
+
+test("all 12 postal route snapshots calculate with actual weight and rFBS commission", () => {
+  const routes = _internals.LOGISTICS.records.filter((row) => row.fulfillment === "postal");
+  assert.equal(routes.length, 12);
+  for (const row of routes) {
+    const result = calculatePricing({ ...base, country: row.country, fulfillment: "postal", provider: row.providerKey, channel: row.channel, weightG: 300, targetProfit: 0, containsBattery: false, containsLiquid: false });
+    assert.equal(result.recommended.logistics.method, row.method, row.channel);
+    assert.equal(result.recommended.logistics.feeCny, _internals.centsUp(row.baseCny + row.perGramCny * 300), row.channel);
+    const band = result.recommended.saleRub <= 1500 ? 0 : result.recommended.saleRub <= 5000 ? 1 : 2;
+    assert.equal(result.recommended.fees.commissionRate, category.rfbs[band] / 100, row.channel);
+    assert.ok(result.recommended.profitCny >= -0.000001, row.channel);
+  }
 });
 
 test("commission boundaries at 1500/1501 and 5000/5001 use the correct band", () => {

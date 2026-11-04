@@ -12,7 +12,12 @@
   async function request(path, options = {}) {
     const response = await fetch(api + path, { credentials: "omit", headers: { Accept: "application/json", ...(options.body ? { "Content-Type": "application/json" } : {}) }, ...options });
     const body = await response.json();
-    if (!response.ok) throw new Error(body?.error?.message || "暂时无法完成，请稍后重试。");
+    if (!response.ok) {
+      const error = new Error(body?.error?.message || "暂时无法完成，请稍后重试。");
+      error.code = body?.error?.code;
+      error.details = body?.error?.details || {};
+      throw error;
+    }
     return body;
   }
   const moneyCny = (value) => `¥ ${Number(value || 0).toLocaleString("zh-CN", { maximumFractionDigits: 2 })}`;
@@ -122,15 +127,18 @@
     const country = $("pricingCalcCountry").value;
     const countryRows = rows.filter((row) => row.country === country);
     const fs = [...new Set(countryRows.map((row) => row.fulfillment))];
-    const fulfillment = setOptions($("pricingCalcFulfillment"), ["rfbs", "fbp"].filter((x) => fs.includes(x)).map((value) => ({ value, label: value === "fbp" ? "FBP" : "rFBS" })), changed === "pricingCalcCountry" ? "rfbs" : $("pricingCalcFulfillment").value);
+    const fulfillmentLabels = { rfbs: "rFBS", fbp: "FBP", ogl: "OGL", postal: "邮政" };
+    const fulfillment = setOptions($("pricingCalcFulfillment"), ["rfbs", "fbp", "ogl", "postal"].filter((value) => fs.includes(value)).map((value) => ({ value, label: fulfillmentLabels[value] })), changed === "pricingCalcCountry" ? "rfbs" : $("pricingCalcFulfillment").value);
     const scoped = countryRows.filter((row) => row.fulfillment === fulfillment);
     const providers = [...new Map(scoped.map((row) => [row.providerKey, row.providerLabel])).entries()].sort((a, b) => a[1].localeCompare(b[1], "zh-CN")).map(([value, label]) => ({ value, label }));
     const provider = setOptions($("pricingCalcProvider"), providers, ["pricingCalcCountry", "pricingCalcFulfillment"].includes(changed) ? "" : $("pricingCalcProvider").value);
-    const available = new Set(scoped.filter((row) => row.providerKey === provider).map((row) => row.channel));
-    setOptions($("pricingCalcChannel"), ["express", "standard", "economy"].filter((value) => available.has(value)).map((value) => ({ value, label: value === "express" ? "Express 快速" : value === "standard" ? "Standard 标准" : "Economy 经济" })), ["pricingCalcCountry", "pricingCalcFulfillment", "pricingCalcProvider"].includes(changed) ? "standard" : $("pricingCalcChannel").value);
+    const providerRows = scoped.filter((row) => row.providerKey === provider);
+    const available = [...new Map(providerRows.map((row) => [row.channel, row.channelLabel || ({ express: "Express 快速", standard: "Standard 标准", economy: "Economy 经济" }[row.channel] || row.channel)])).entries()].map(([value, label]) => ({ value, label }));
+    setOptions($("pricingCalcChannel"), available, ["pricingCalcCountry", "pricingCalcFulfillment", "pricingCalcProvider"].includes(changed) ? "standard" : $("pricingCalcChannel").value);
     const countryLabel = state.logistics?.countries?.find((row) => row.key === country)?.label || country;
     const providerLabel = providers.find((row) => row.value === provider)?.label || provider;
-    $("pricingCalcLogisticsStatus").textContent = provider && $("pricingCalcChannel").value ? `${countryLabel} · ${fulfillment === "fbp" ? "FBP" : "rFBS"} · ${providerLabel} · 系统将按售价、重量和尺寸自动匹配包裹类型` : `${countryLabel}当前没有可用物流方案`;
+    $("pricingCalcPostalContentRow").hidden = fulfillment !== "postal";
+    $("pricingCalcLogisticsStatus").textContent = provider && $("pricingCalcChannel").value ? `${countryLabel} · ${fulfillmentLabels[fulfillment] || fulfillment} · ${providerLabel} · 按所选线路规则估算物流费` : `${countryLabel}当前没有可用物流方案`;
   }
 
   const fieldHelp = {
@@ -166,20 +174,22 @@
       domesticCost: number("pricingCalcDomesticCost"), otherCostRate: number("pricingCalcOtherCost") / 100, promoRate: number("pricingCalcPromoRate") / 100,
       commissionRate: quote.fees.commissionRate
     };
-    const groupNames = { extraSmall: "Extra Small", budget: "Budget", small: "Small", big: "Big", premiumSmall: "Premium Small", premiumBig: "Premium Big" };
-    const map = (item) => ({ input: { ...input, channel: item.logistics.channel }, channel: { label: item.logistics.channel === "express" ? "Express" : item.logistics.channel === "standard" ? "Standard" : "Economy", days: item.logistics.days }, logistics: item.logistics, group: { label: groupNames[item.logistics.group] || item.logistics.group }, saleCny: item.saleCny, saleRub: item.saleRub, profitCny: item.profitCny, margin: item.margin, logisticsCny: item.fees.logisticsCny, lastMileCny: item.fees.lastMileCny, lastMileRub: item.fees.lastMileRub, commissionCny: item.fees.commissionCny, promoCny: item.fees.advertisingCny, otherCny: item.fees.otherCostCny });
+    const groupNames = { extraSmall: "Extra Small", budget: "Budget", small: "Small", big: "Big", premiumSmall: "Premium Small", premiumBig: "Premium Big", postal: "邮政线路" };
+    const map = (item) => ({ input: { ...input, channel: item.logistics.channel }, channel: { label: item.logistics.channelLabel || ({ express: "Express", standard: "Standard", economy: "Economy" }[item.logistics.channel] || item.logistics.channel), days: item.logistics.days }, logistics: item.logistics, group: { label: groupNames[item.logistics.group] || item.logistics.group }, saleCny: item.saleCny, saleRub: item.saleRub, profitCny: item.profitCny, margin: item.margin, logisticsCny: item.fees.logisticsCny, lastMileCny: item.fees.lastMileCny, lastMileRub: item.fees.lastMileRub, commissionCny: item.fees.commissionCny, promoCny: item.fees.advertisingCny, otherCny: item.fees.otherCostCny });
     const result = map(quote);
     const channelQuotes = (payload.channelQuotes || []).map(map);
+    const postalRequirements = input.fulfillment === "postal" ? result.logistics.requirements : null;
+    const postalMarkup = postalRequirements ? `<div class="pricing-postal-requirements"><strong>${escapeHtml(result.logistics.method)}</strong><span>${escapeHtml(result.logistics.deliveryPoint || "邮局网点")} · ${escapeHtml(result.logistics.days || "")}</span><p>含电池商品：${postalRequirements.batteriesAllowed ? "可寄" : "不可寄"}；含液体商品：${postalRequirements.liquidsAllowed ? "可寄" : "不可寄"}</p>${postalRequirements.returns ? `<small>${escapeHtml(postalRequirements.returns)}</small>` : ""}</div>` : "";
     const shownProfit = input.profitMode === "fixed" ? input.targetProfitCny : result.profitCny;
     const shownMargin = result.saleCny > 0 ? shownProfit / result.saleCny : 0;
     const target = input.profitMode === "fixed" ? `期望利润 ${moneyCny(input.targetProfitCny)}` : `期望利润率 ${(input.targetMargin * 100).toFixed(1)}%`;
     const rateLabel = (value) => `${Number((Number(value || 0) * 100).toFixed(2)).toLocaleString("zh-CN")}%`;
-    const sourceKey = input.fulfillment === "fbp" ? "fbp" : input.country === "ru" ? "rfbs-ru" : "rfbs-cis";
-    const sourceOrder = ["commission", "rfbs-ru", "fbp", "rfbs-cis"];
+    const sourceKey = input.fulfillment === "fbp" ? "fbp" : input.fulfillment === "ogl" ? "ogl" : input.fulfillment === "postal" ? "china-post" : input.country === "ru" ? "rfbs-ru" : "rfbs-cis";
+    const sourceOrder = ["commission", "rfbs-ru", "fbp", "rfbs-cis", "ogl", "china-post"];
     const sourceMarkup = sourceOrder.map((key) => state.logistics?.sources?.find((source) => source.key === key)).filter(Boolean).map((source) => `<div class="pricing-calc-source-item ${source.key === sourceKey ? "current-source" : ""}"><span>${source.key === "commission" ? "佣金费率" : "物流资费"}</span><a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer"><strong>${escapeHtml(source.label)}</strong><span aria-hidden="true">↗</span></a><small>${escapeHtml(source.version)} · 更新于 ${escapeHtml(source.updatedAt)}${source.key === sourceKey ? " · 当前采用" : ""}</small></div>`).join("");
     $("resultPanel").innerHTML = `
       <section class="panel pricing-calc-result-card"><div class="pricing-calc-card-title"><span></span><h2>计算结果</h2></div><div class="pricing-calc-result-pair"><div class="pricing-calc-primary-metric"><span>售价</span><strong class="${shownProfit >= 0 ? "positive" : "negative"}">${moneyCny(result.saleRub / input.fx)}</strong><small>≈ ${moneyRub(result.saleRub)}</small></div><div class="pricing-calc-secondary-metric"><span>利润</span><strong>${moneyCny(shownProfit)}</strong><small>利润率 ${(shownMargin * 100).toFixed(1)}%</small></div></div><p class="pricing-calc-rate-line">${target} · 当前汇率：¥1 = ₽${input.fx.toFixed(4)}</p></section>
-      <section class="panel pricing-calc-logistics-card"><div class="pricing-calc-card-title"><span></span><h2>物流费用</h2></div><p class="pricing-calc-match-note">系统已按售价、重量和体积自动匹配 ${escapeHtml(result.group.label)}，下方费用均按该类型计算。</p><div class="pricing-calc-shipping-options">${channelQuotes.map((item) => `<button class="pricing-calc-shipping-option${item.input.channel === input.channel ? " active" : ""}" type="button" data-channel="${escapeHtml(item.input.channel)}">${item.input.channel === input.channel ? "<b>当前所选</b>" : ""}<span>${escapeHtml(item.channel.label)}</span><em>${escapeHtml(item.group.label)}</em><strong>${moneyCny(item.logisticsCny)}</strong><small>${escapeHtml(item.channel.days || "")}</small></button>`).join("")}</div></section>
+      <section class="panel pricing-calc-logistics-card"><div class="pricing-calc-card-title"><span></span><h2>物流费用</h2></div><p class="pricing-calc-match-note">系统已按售价、实际重量和所选线路的尺寸规则匹配运输费用。</p><div class="pricing-calc-shipping-options">${channelQuotes.map((item) => `<button class="pricing-calc-shipping-option${item.input.channel === input.channel ? " active" : ""}" type="button" data-channel="${escapeHtml(item.input.channel)}">${item.input.channel === input.channel ? "<b>当前所选</b>" : ""}<span>${escapeHtml(item.channel.label)}</span><em>${escapeHtml(item.group.label)}</em><strong>${moneyCny(item.logisticsCny)}</strong><small>${escapeHtml(item.channel.days || "")}</small></button>`).join("")}</div>${postalMarkup}</section>
       <section class="panel pricing-calc-detail-card"><div class="pricing-calc-card-title"><span></span><h2>计算明细</h2></div><div class="pricing-calc-detail-list"><section class="pricing-calc-detail-group"><h3>商品成本</h3>${detailRow("采购成本", moneyCny(input.costCny), "detail-purchase-cost")}${detailRow("国内运费+代贴单", moneyCny(input.domesticCost), "detail-domestic-cost")}${detailRow(`其他成本 ${rateLabel(input.otherCostRate)}`, moneyCny(result.otherCny), "detail-other-cost")}</section><section class="pricing-calc-detail-group"><h3>平台费用</h3>${detailRow("跨境物流费", moneyCny(result.logisticsCny), "detail-cross-border-logistics")}${detailRow("尾程派送费 2%", `${moneyCny(result.lastMileCny)}（${moneyRub(result.lastMileRub)}）`, "detail-last-mile")}${detailRow(`平台佣金 ${rateLabel(result.input.commissionRate)}`, moneyCny(result.commissionCny), "detail-commission")}${detailRow(`广告费 ${rateLabel(input.promoRate)}`, moneyCny(result.promoCny), "detail-advertising")}</section></div><div class="pricing-calc-source-note"><div class="pricing-calc-source-header"><div><strong>官方数据来源</strong><small>佣金与物流资费依据</small></div><a class="pricing-calc-official-link" href="https://global-help.ozon.com/zh/" target="_blank" rel="noopener noreferrer">Ozon 官方资料 <span aria-hidden="true">↗</span></a></div><div class="pricing-calc-source-grid">${sourceMarkup}</div></div></section>`;
   }
 
@@ -190,22 +200,29 @@
       provider: $("pricingCalcProvider").value, channel: $("pricingCalcChannel").value,
       costCny: number("pricingCalcCostCny"), fx: number("pricingCalcFx"), weightG: number("pricingCalcWeightG"),
       lengthCm: number("pricingCalcLengthCm"), widthCm: number("pricingCalcWidthCm"), heightCm: number("pricingCalcHeightCm"),
+      containsBattery: $("pricingCalcContainsBattery").value === "true", containsLiquid: $("pricingCalcContainsLiquid").value === "true",
       profitMode, targetProfit: number("pricingCalcTargetProfit"), domesticCost: number("pricingCalcDomesticCost"),
       promoRate: number("pricingCalcPromoRate"), otherCostRate: number("pricingCalcOtherCost")
     };
   }
   function showError(error) {
-    const logisticsError = ["SIZE_LIMIT", "SIZE_LIMIT_EXCEEDED", "WEIGHT_LIMIT_EXCEEDED", "SALE_LIMIT_EXCEEDED", "NO_FEASIBLE_SERVICE", "CHANNEL_UNAVAILABLE", "ROUTE_UNAVAILABLE"].includes(error.code);
-    const dimensionMessage = logisticsError ? error.message || "请调整包裹尺寸、重量或物流渠道。" : "";
+    const logisticsError = ["SIZE_LIMIT", "WEIGHT_LIMIT_EXCEEDED", "ITEM_RESTRICTION", "SALE_LIMIT_EXCEEDED", "NO_FEASIBLE_SERVICE", "CHANNEL_UNAVAILABLE", "ROUTE_UNAVAILABLE"].includes(error.code);
+    const dimensionMessage = error.code === "SIZE_LIMIT" ? error.message || "请检查包裹尺寸限制。" : "";
+    const inputMessage = logisticsError && error.code !== "SIZE_LIMIT" ? error.message || "当前输入不符合所选物流线路的条件。" : "";
     $("pricingCalcDimensionError").hidden = !dimensionMessage;
     $("pricingCalcDimensionError").textContent = dimensionMessage;
-    ["pricingCalcLengthCm", "pricingCalcWidthCm", "pricingCalcHeightCm"].forEach((id) => $(id).classList.toggle("input-error", Boolean(dimensionMessage)));
+    $("pricingCalcLogisticsError").hidden = !inputMessage;
+    $("pricingCalcLogisticsError").textContent = inputMessage;
+    const fieldByCode = { WEIGHT_LIMIT_EXCEEDED: ["pricingCalcWeightG"], ITEM_RESTRICTION: [error.details?.field === "containsLiquid" ? "pricingCalcContainsLiquid" : "pricingCalcContainsBattery"] };
+    ["pricingCalcLengthCm", "pricingCalcWidthCm", "pricingCalcHeightCm", "pricingCalcWeightG", "pricingCalcContainsBattery", "pricingCalcContainsLiquid"].forEach((id) => { $(id).classList.remove("input-error"); $(id).setAttribute("aria-invalid", "false"); });
+    if (error.code === "SIZE_LIMIT") ["pricingCalcLengthCm", "pricingCalcWidthCm", "pricingCalcHeightCm"].forEach((id) => $(id).classList.add("input-error"));
+    (fieldByCode[error.code] || []).forEach((id) => { $(id).classList.add("input-error"); $(id).setAttribute("aria-invalid", "true"); });
     $("resultPanel").innerHTML = `<section class="panel pricing-calc-detail-card" role="alert"><strong>${logisticsError ? "当前包裹不符合物流限制" : "暂时无法反推出应售价格"}</strong><p>${escapeHtml(error.message || "请检查输入内容后重试。")}</p></section>`;
   }
 
   const numericRules = [
     ["pricingCalcCostCny", "采购成本", .01, 1000000, 2], ["pricingCalcTargetProfit", "期望利润", 0, 1000000, 2],
-    ["pricingCalcWeightG", "包裹重量", 1, 30000, 0], ["pricingCalcLengthCm", "包裹长度", .1, 1000, 1],
+    ["pricingCalcWeightG", "包裹重量", 1, 100000, 0], ["pricingCalcLengthCm", "包裹长度", .1, 1000, 1],
     ["pricingCalcWidthCm", "包裹宽度", .1, 1000, 1], ["pricingCalcHeightCm", "包裹高度", .1, 1000, 1],
     ["pricingCalcDomesticCost", "国内运费+代贴单", 0, 1000000, 2], ["pricingCalcPromoRate", "广告费占比", 0, 80, 2],
     ["pricingCalcOtherCost", "其他成本", 0, 80, 2], ["pricingCalcFx", "汇率", .0001, 1000, 4]
@@ -254,6 +271,9 @@
 
   function scheduleCalculation() {
     if (state.calculationTimer) clearTimeout(state.calculationTimer);
+    $("pricingCalcDimensionError").hidden = true;
+    $("pricingCalcLogisticsError").hidden = true;
+    ["pricingCalcLengthCm", "pricingCalcWidthCm", "pricingCalcHeightCm", "pricingCalcWeightG", "pricingCalcContainsBattery", "pricingCalcContainsLiquid"].forEach((id) => $(id).classList.remove("input-error"));
     const category = selectedCategory();
     const errors = validateInputs();
     if (!category) {
@@ -319,6 +339,7 @@
       state.logistics = logistics;
       state.sources = logistics.sources || [];
       state.exchangeRate = rate;
+      setOptions($("pricingCalcCountry"), (logistics.countries || []).map(({ key, label }) => ({ value: key, label })), $("pricingCalcCountry").value);
       if (!$("pricingCalcFx").dataset.userEdited) $("pricingCalcFx").value = Number(rate.rate).toFixed(4);
       $("pricingCalcFxMeta").textContent = `参考：${rate.source} · ${rate.quoteDate}`;
       $("pricingCalcLogisticsStatus").textContent = "";
@@ -378,7 +399,7 @@
     normalizeNumericInput(event.target, { finalize: true });
     scheduleCalculation();
   });
-  ["pricingCalcCountry", "pricingCalcFulfillment", "pricingCalcProvider"].forEach((id) => $(id).addEventListener("change", () => { syncLogistics(id); scheduleCalculation(); }));
+  ["pricingCalcCountry", "pricingCalcFulfillment", "pricingCalcProvider", "pricingCalcContainsBattery", "pricingCalcContainsLiquid"].forEach((id) => $(id).addEventListener("change", () => { syncLogistics(id); scheduleCalculation(); }));
   $("pricingCalcChannel").addEventListener("change", scheduleCalculation);
   $("resultPanel").addEventListener("click", (event) => { const option = event.target.closest("[data-channel]"); if (option) { $("pricingCalcChannel").value = option.dataset.channel; calculate(); } });
   init();

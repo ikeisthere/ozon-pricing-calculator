@@ -19,6 +19,13 @@ assert.doesNotMatch(js, /ozon\.kuakuakua\.com\/api\/public\/pricing/);
 assert.doesNotMatch(js, /fetch\(\s*["'`]https?:\/\//, "calculator must not call a remote calculation API");
 assert.match(js, /credentials:\s*"omit"/);
 assert.match(js, /function scheduleCalculation\(\)/);
+assert.match(html, /value="ogl">OGL/);
+assert.match(html, /value="postal">邮政/);
+assert.match(html, /pricingCalcContainsBattery/);
+assert.match(js, /WEIGHT_LIMIT_EXCEEDED/);
+assert.match(js, /containsBattery/);
+assert.match(js, /china-post/);
+assert.match(css, /pricing-postal-requirements/);
 assert.ok(css.length > 1000, "calculator styles are present");
 const cisSource = logistics.sources.find((source) => source.key === "rfbs-cis");
 assert.equal(cisSource.version, "20_08_26");
@@ -28,6 +35,11 @@ const updatedKzPremium = logistics.records.find((row) => row.country === "kz" &&
 assert.equal(updatedKzPremium.saleMaxRub, 250000);
 assert.equal(updatedKzPremium.baseCny, 22.88);
 assert.equal(updatedKzPremium.perGramCny, 0.0364);
+assert.equal(logistics.records.filter((row) => row.fulfillment === "ogl").length, 6);
+assert.equal(logistics.records.filter((row) => row.fulfillment === "postal").length, 12);
+assert.deepEqual(logistics.countries.filter((row) => ["am", "uz", "az"].includes(row.key)).map((row) => row.key), ["am", "uz", "az"]);
+assert.equal(logistics.sources.find((source) => source.key === "ogl").version, "24_08_26");
+assert.equal(logistics.sources.find((source) => source.key === "china-post").version, "29_10_26");
 new Function(js);
 
 console.log("Standalone calculator assets, local API dependency, canonical target, and script syntax are valid.");

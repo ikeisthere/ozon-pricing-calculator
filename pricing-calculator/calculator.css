@@ -80,6 +80,10 @@
 .pricing-logistics-status,.field-hint { margin: 0; color: #75849a; font-size: 12px; line-height: 1.5; }
 .pricing-dimension-error { margin: 0; padding: 10px 12px; border: 1px solid #ffc9c5; border-radius: 9px; background: #fff5f5; color: #b42318; font-size: 12px; line-height: 1.5; }
 .pricing-calc-page .input-error { border-color: #e5484d !important; box-shadow: 0 0 0 3px rgba(229,72,77,.1) !important; }
+.pricing-postal-requirements { display: grid; gap: 5px; margin-top: 12px; padding: 12px; border: 1px solid #dce7f8; border-radius: 10px; background: #f7faff; color: #425671; font-size: 12px; line-height: 1.5; }
+.pricing-postal-requirements strong { color: var(--ink); font-size: 13px; }
+.pricing-postal-requirements p,.pricing-postal-requirements small { margin: 0; }
+.pricing-postal-requirements small { color: #75849a; }
 .pricing-fx-control { display: grid; grid-template-columns: minmax(150px, .55fr) minmax(0, 1fr); align-items: center; gap: 10px; }
 .pricing-fx-meta { color: #75849a; font-size: 11px; }
 .pricing-category-field { position: relative; }
