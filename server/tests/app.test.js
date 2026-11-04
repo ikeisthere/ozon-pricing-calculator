@@ -25,6 +25,10 @@ test("standalone server serves the calculator and its own catalogs/calculation A
   const logistics = await fetch(`${baseUrl}/api/pricing/catalog/logistics`).then((response) => response.json());
   assert.ok(logistics.records.length > 0);
   assert.equal(logistics.sources.find((source) => source.key === "rfbs-ru").url, "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/China_scoring_ENG_CN_24_07_26_1784197567.xlsx");
+  assert.equal(logistics.sources.find((source) => source.key === "ogl").url, "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/OGL_ENG_CN_24_08_26_added_Pick-up_1786697358.xlsx");
+  assert.equal(logistics.sources.find((source) => source.key === "china-post").url, "https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN");
+  assert.ok(logistics.countries.some((country) => country.key === "az"));
+  assert.ok(logistics.records.some((row) => row.fulfillment === "postal" && row.channel === "ru-ozon-economy" && row.channelLabel.includes("经济")));
   const rate = await fetch(`${baseUrl}/api/pricing/exchange-rate`).then((response) => response.json());
   assert.equal(rate.source, "test");
 
@@ -35,6 +39,15 @@ test("standalone server serves the calculator and its own catalogs/calculation A
   });
   assert.equal(calculated.status, 200);
   assert.ok((await calculated.json()).recommended.saleRub > 0);
+
+  const blockedPostal = await fetch(`${baseUrl}/api/pricing/calculate`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ categoryId: category.id, country: "ru", fulfillment: "postal", provider: "china-post", channel: "ru-ozon-standard", costCny: 50, fx: 12.5, weightG: 300, lengthCm: 20, widthCm: 20, heightCm: 10, containsBattery: true, profitMode: "fixed", targetProfit: 0 })
+  });
+  assert.equal(blockedPostal.status, 422);
+  const postalError = await blockedPostal.json();
+  assert.equal(postalError.error.code, "ITEM_RESTRICTION");
+  assert.equal(postalError.error.details.field, "containsBattery");
 
   const privatePath = await fetch(`${baseUrl}/server/data/ozon-commission-catalog.json`);
   assert.equal(privatePath.status, 404);

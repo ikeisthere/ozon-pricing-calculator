@@ -22,7 +22,9 @@ const PRICING_SOURCE_URLS = {
   commission: "https://cdn.ozone.ru/s3/ozon-disk-api/global-education/ru/commissions/ozon-fees/comissions/Tarifs_CN_01_12_2025_1761720496.xlsx",
   "rfbs-ru": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/China_scoring_ENG_CN_24_07_26_1784197567.xlsx",
   fbp: "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/FBP_List_of_services_24_07_26_1784197567.xlsx",
-  "rfbs-cis": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx"
+  "rfbs-cis": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx",
+  ogl: "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/OGL_ENG_CN_24_08_26_added_Pick-up_1786697358.xlsx",
+  "china-post": "https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN"
 };
 
 async function getExchangeRate() {
@@ -75,7 +77,7 @@ function createServer({ exchangeRateProvider = getExchangeRate } = {}) {
       }
       if (req.method === "GET" && url.pathname === "/api/pricing/catalog/logistics") {
         const catalog = getPricingCatalogs().logistics;
-        const records = [...new Map(catalog.records.map(({ country, fulfillment, providerKey, providerLabel, channel }) => [`${country}|${fulfillment}|${providerKey}|${channel}`, { country, fulfillment, providerKey, providerLabel, channel }])).values()];
+        const records = [...new Map(catalog.records.map(({ country, fulfillment, providerKey, providerLabel, channel, channelLabel }) => [`${country}|${fulfillment}|${providerKey}|${channel}`, { country, fulfillment, providerKey, providerLabel, channel, channelLabel: channelLabel || "" }])).values()];
         const sources = catalog.sources.map((source) => ({ ...source, url: PRICING_SOURCE_URLS[source.key] || "https://docs.ozon.ru/global/zh/" }));
         return json(res, 200, { schemaVersion: catalog.schemaVersion, generatedAt: catalog.generatedAt, countries: catalog.countries, sources, records });
       }

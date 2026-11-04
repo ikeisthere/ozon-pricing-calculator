@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-29",
+  "generatedAt": "2026-11-04",
   "countries": [
     {
       "key": "ru",
@@ -17,6 +17,18 @@
     {
       "key": "kg",
       "label": "吉尔吉斯斯坦"
+    },
+    {
+      "key": "am",
+      "label": "亚美尼亚"
+    },
+    {
+      "key": "uz",
+      "label": "乌兹别克斯坦"
+    },
+    {
+      "key": "az",
+      "label": "阿塞拜疆"
     }
   ],
   "sources": [
@@ -51,6 +63,23 @@
       "updatedAt": "2026-08-20",
       "status": "active",
       "url": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx"
+    },
+    {
+      "key": "ogl",
+      "label": "Ozon 官方 OGL 物流资费表",
+      "version": "24_08_26",
+      "updatedAt": "2026-08-24",
+      "status": "active",
+      "url": "https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/OGL_ENG_CN_24_08_26_added_Pick-up_1786697358.xlsx",
+      "helpUrl": "https://global-help.ozon.com/zh/commissions/ozon-fees/ogl-rates?region=CHN"
+    },
+    {
+      "key": "china-post",
+      "label": "Ozon 中国邮政线路表",
+      "version": "29_10_26",
+      "updatedAt": "2026-10-29",
+      "status": "active",
+      "url": "https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN"
     }
   ],
   "records": [
@@ -9653,6 +9682,580 @@
       "saleMaxRub": 7000,
       "chargeType": "actual",
       "volumeDivisor": null
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "extraSmall",
+      "method": "OGL Extra Small",
+      "days": "13-17",
+      "baseCny": 2.9,
+      "perGramCny": 0.0247,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 1,
+      "weightMaxG": 500,
+      "saleMinRub": 1,
+      "saleMaxRub": 1500,
+      "chargeType": "actual",
+      "volumeDivisor": null
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "budget",
+      "method": "OGL Budget",
+      "days": "13-17",
+      "baseCny": 22.25,
+      "perGramCny": 0.0164,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 501,
+      "weightMaxG": 35000,
+      "saleMinRub": 1,
+      "saleMaxRub": 1500,
+      "chargeType": "actual",
+      "volumeDivisor": null
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "small",
+      "method": "OGL Small",
+      "days": "13-17",
+      "baseCny": 15.48,
+      "perGramCny": 0.0242,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 1,
+      "weightMaxG": 2000,
+      "saleMinRub": 1501,
+      "saleMaxRub": 7000,
+      "chargeType": "actual",
+      "volumeDivisor": null
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "big",
+      "method": "OGL Big",
+      "days": "13-17",
+      "baseCny": 34.82,
+      "perGramCny": 0.0164,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 2001,
+      "weightMaxG": 35000,
+      "saleMinRub": 1501,
+      "saleMaxRub": 7000,
+      "chargeType": "maxActualVolume",
+      "volumeDivisor": 12000
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "premiumSmall",
+      "method": "OGL Premium Small",
+      "days": "13-17",
+      "baseCny": 21.28,
+      "perGramCny": 0.0242,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 1,
+      "weightMaxG": 5000,
+      "saleMinRub": 7001,
+      "saleMaxRub": 250000,
+      "chargeType": "actual",
+      "volumeDivisor": null
+    },
+    {
+      "country": "ru",
+      "fulfillment": "ogl",
+      "providerKey": "ogl",
+      "providerLabel": "OGL",
+      "channel": "standard",
+      "group": "premiumBig",
+      "method": "OGL Premium Big",
+      "days": "13-17",
+      "baseCny": 59.97,
+      "perGramCny": 0.0222,
+      "batteries": true,
+      "liquids": true,
+      "size": {
+        "maxSide": 200
+      },
+      "weightMinG": 5001,
+      "weightMaxG": 35000,
+      "saleMinRub": 7001,
+      "saleMaxRub": 250000,
+      "chargeType": "maxActualVolume",
+      "volumeDivisor": 12000
+    },
+    {
+      "country": "ru",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "ru-ozon-standard",
+      "channelLabel": "Ozon 标准（空运）",
+      "group": "postal",
+      "method": "China Post to OZON Standard（空运）",
+      "deliveryPoint": "Ozon 自提点",
+      "days": "10-15 天",
+      "baseCny": 1.9,
+      "perGramCny": 0.067,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60
+      },
+      "weightMinG": 0,
+      "weightMaxG": 500,
+      "saleMinRub": 1,
+      "saleMaxRub": 1500,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点未发出的货件可无附加费退回；清关前后取消均无附加费销毁。"
+    },
+    {
+      "country": "ru",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "ru-ozon-economy",
+      "channelLabel": "Ozon 经济（陆运）",
+      "group": "postal",
+      "method": "China Post to OZON Economy（陆运）",
+      "deliveryPoint": "Ozon 自提点",
+      "days": "20-25 天",
+      "baseCny": 1.9,
+      "perGramCny": 0.026,
+      "batteries": true,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60
+      },
+      "weightMinG": 0,
+      "weightMaxG": 500,
+      "saleMinRub": 1,
+      "saleMaxRub": 1500,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点未发出的货件可无附加费退回；清关前后取消均无附加费销毁。"
+    },
+    {
+      "country": "ru",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "ru-epacket-super-express",
+      "channelLabel": "ePacket 超级特快（空运）",
+      "group": "postal",
+      "method": "China Post ePacket Super Express（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "9-20 天",
+      "baseCny": 15,
+      "perGramCny": 0.095,
+      "batteries": true,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": 18000,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "ru",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "ru-epacket",
+      "channelLabel": "ePacket（空运）",
+      "group": "postal",
+      "method": "China Post ePacket（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "10-22 天",
+      "baseCny": 15,
+      "perGramCny": 0.065,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": 18000,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "ru",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "ru-epacket-economy-track",
+      "channelLabel": "ePacket Economy Track（陆运）",
+      "group": "postal",
+      "method": "China Post ePacket Economy Track（陆运）",
+      "deliveryPoint": "邮局网点",
+      "days": "20-32 天",
+      "baseCny": 15,
+      "perGramCny": 0.03475,
+      "batteries": true,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": 18000,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "kz",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "kz-epacket",
+      "channelLabel": "ePacket 哈萨克斯坦（空运）",
+      "group": "postal",
+      "method": "China Post ePacket Kazakhstan（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "30-35 天",
+      "baseCny": 1.7,
+      "perGramCny": 0.04675,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "kz",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "kz-epacket-economy-track",
+      "channelLabel": "ePacket Economy Track 哈萨克斯坦（陆运）",
+      "group": "postal",
+      "method": "China Post ePacket Economy Track Kazakhstan（陆运）",
+      "deliveryPoint": "邮局网点",
+      "days": "35-45 天",
+      "baseCny": 1.7,
+      "perGramCny": 0.034,
+      "batteries": true,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "by",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "by-epacket",
+      "channelLabel": "ePacket 白俄罗斯（空运）",
+      "group": "postal",
+      "method": "China Post ePacket Belarus（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "20-25 天",
+      "baseCny": 18,
+      "perGramCny": 0.086,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "by",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "by-epacket-economy",
+      "channelLabel": "ePacket Economy 白俄罗斯（陆运）",
+      "group": "postal",
+      "method": "China Post ePacket Economy Belarus（陆运）",
+      "deliveryPoint": "邮局网点",
+      "days": "35-45 天",
+      "baseCny": 18,
+      "perGramCny": 0.035,
+      "batteries": true,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 5000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "am",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "am-epacket",
+      "channelLabel": "ePacket 亚美尼亚（空运）",
+      "group": "postal",
+      "method": "China Post ePacket AM（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "20-30 天",
+      "baseCny": 6,
+      "perGramCny": 0.1596,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 2000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "uz",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "uz-epacket",
+      "channelLabel": "ePacket 乌兹别克斯坦（空运）",
+      "group": "postal",
+      "method": "China Post ePacket UZ（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "25-35 天",
+      "baseCny": 6,
+      "perGramCny": 0.108,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 2000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
+    },
+    {
+      "country": "az",
+      "fulfillment": "postal",
+      "providerKey": "china-post",
+      "providerLabel": "中国邮政",
+      "channel": "az-epacket",
+      "channelLabel": "ePacket 阿塞拜疆（空运）",
+      "group": "postal",
+      "method": "China Post ePacket AZ（空运）",
+      "deliveryPoint": "邮局网点",
+      "days": "25-35 天",
+      "baseCny": 6,
+      "perGramCny": 0.128,
+      "batteries": false,
+      "liquids": false,
+      "size": {
+        "sideSum": 90,
+        "sideSumExclusive": true,
+        "maxSide": 60,
+        "minSides": [
+          14,
+          11
+        ],
+        "cylinder": {
+          "maxTwiceDiameterPlusLength": 104,
+          "maxLength": 90,
+          "minTwiceDiameterPlusLength": 17,
+          "minLength": 11
+        }
+      },
+      "weightMinG": 0,
+      "weightMaxG": 2000,
+      "saleMinRub": 1,
+      "saleMaxRub": null,
+      "chargeType": "actual",
+      "volumeDivisor": null,
+      "returns": "在揽收点已揽收但尚未发出的货件可无附加费退回；清关开始前或之后退回，均按中国邮政现行运输资费付费。"
     }
   ]
 }

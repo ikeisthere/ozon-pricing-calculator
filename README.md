@@ -17,12 +17,12 @@ node server/app.js
 - `pricing-calculator/`：计算器页面、交互和样式。
 - `server/app.js`：轻量本地 API 与静态页面服务，只用 Node.js 内置模块。
 - `server/pricing-engine.js`、`server/pricing-catalog.js`：售价反推、成本拆分、约束校验和费率读取逻辑。
-- `server/data/`：随项目提供的佣金与物流费率目录。来源、版本、更新时间和已知限制见 [`DATA-SOURCES.md`](./DATA-SOURCES.md)。
+- `server/data/`：随项目提供的佣金与物流费率目录，覆盖 rFBS、FBP、OGL 和邮政路线。来源、版本、更新时间和已知限制见 [`DATA-SOURCES.md`](./DATA-SOURCES.md)。
 - `tools/`、`brand-mark.svg`：页面所需的样式、导航脚本和品牌图形。品牌图形不属于 MIT 代码许可，见 [`NOTICE.md`](./NOTICE.md)。
 
 ## 费率与计算结果
 
-费率会随 Ozon 政策和承运线路调整。本项目提供的是带版本日期的费率快照，不承诺始终是最新费率。人民币兑卢布参考汇率从俄罗斯央行公开日汇率读取，并显示报价日期；它不是卖家实际结算汇率。最终刊登或调价前，请在 Ozon Seller 和实际物流合同中复核费用。
+费率会随 Ozon 政策和承运线路调整。本项目提供的是带版本日期的费率快照，不承诺始终是最新费率。计算器根据国家筛选已录入的物流方案：rFBS、FBP、OGL 和中国邮政覆盖范围不同；邮政报价按实际重量计算，并校验线路的货值、重量、尺寸、电池和液体限制。OGL 部分档位按实际重量与体积重取较大值。人民币兑卢布参考汇率从俄罗斯央行公开日汇率读取，并显示报价日期；它不是卖家实际结算汇率。最终刊登或调价前，请在 Ozon Seller 和实际物流合同中复核费用。
 
 计算结果是经营测算，不构成 Ozon 官方报价或收益保证。修改费率目录时，请一并更新 [`DATA-SOURCES.md`](./DATA-SOURCES.md) 中的出处与生效日期。
 

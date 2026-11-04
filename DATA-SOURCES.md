@@ -1,27 +1,29 @@
 # 数据来源与计算口径
 
-本文件说明计算器实际使用的数据。佣金和物流数据是随仓库发布的版本快照；只有人民币兑卢布参考汇率会在运行时向来源服务请求。
+本文件说明计算器实际使用的数据。佣金和物流数据是随仓库发布的版本快照；只有人民币兑卢布参考汇率会在运行时向来源服务请求。物流目录最后同步日期为 `2026-11-04`，见 `server/data/pricing-logistics-catalog.json`。
 
 | 数据 | 来源及链接 | 仓库快照/时间 | 使用方式与说明 |
 |---|---|---|---|
 | 人民币兑卢布参考汇率 | [俄罗斯央行日汇率页面](https://www.cbr.ru/eng/currency_base/daily/)；程序读取[官方 XML 日汇率接口](https://www.cbr.ru/scripts/XML_daily.asp) | 成功响应带央行报价日期；运行时缓存最长 6 小时 | 读取 CNY 报价并除以 Nominal，得到 1 CNY 对应 RUB。该官方参考价不等于卖家实际回款或换汇汇率；页面允许手动修改。 |
 | Ozon 中国/香港类目佣金 | Ozon [佣金说明](https://global-help.ozon.com/zh/commissions/ozon-fees/commissions)；[官方佣金工作簿：Tarifs_CN_01_12_2025_1761720496](https://cdn.ozone.ru/s3/ozon-disk-api/global-education/ru/commissions/ozon-fees/comissions/Tarifs_CN_01_12_2025_1761720496.xlsx) | 数据中记录的版本日期为 `2025-12-01`；目录见 `server/data/ozon-commission-catalog.json` | 目录含 10,627 个类目记录，包含叶子类目及 rFBS/FBP 价格档佣金。该快照仍为 2025-12-01 版，不是实时费率；仓库未附原始工作簿或转换脚本。 |
-| 俄罗斯 rFBS 物流 | [Ozon 官方费率工作簿：China scoring 24_07_26](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/China_scoring_ENG_CN_24_07_26_1784197567.xlsx) | JSON 的 `generatedAt` 为 `2026-07-21`；来源元数据标为版本 `24_07_26` / `2026-07-24`。Ozon 下载文件的 HTTP `Last-Modified` 为 `2026-07-16`（2026-09-29 查询） | `generatedAt` 是目录文件的生成字段，`updatedAt` 是来源版本元数据，下载文件修改时间又是独立字段，三者含义不同。目录含承运商、渠道、计价参数和限制；与原始工作簿的逐项转换尚未在本开源仓库重做验证。 |
-| Ozon FBP 物流 | [Ozon 官方 FBP 服务表：24_07_26](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/FBP_List_of_services_24_07_26_1784197567.xlsx) | 来源元数据版本 `24_07_26` / `2026-07-24`；目录 `generatedAt` 为 `2026-07-21` | 随附目录用于 FBP 运费估算，不代表后续政策更新。版本日期、目录生成字段和下载文件修改时间是不同元数据，不能互相替代。 |
-| 哈萨克斯坦、白俄罗斯、吉尔吉斯斯坦 rFBS 物流 | Ozon [合作伙伴配送说明（中国区域）](https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN)；[官方费率与时效工作簿：2026-08-20](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx) | 版本日期 `2026-08-20`；目录 `generatedAt` 为 `2026-09-29`；JSON 见 `server/data/pricing-logistics-catalog.json` | 目录中 126 条 CIS rFBS 商品分档与工作簿配送方式逐条对应。与 2026-07-09 表相比，物流费率公式没有变化；配送时效有更新，且哈萨克斯坦 Ural 的 Premium Small / Premium Big 申报价值上限由 ₽18,000 更新为 ₽250,000（标准与经济渠道）。1 条 KGZ Standard 服务不属于现有商品分档计算，未纳入。原始工作簿未随开源代码分发。 |
-| 尾程费、价格分档、尺寸/重量限制与舍入规则 | [计算引擎](./server/pricing-engine.js)；佣金和物流费率快照见本表 | 随引擎版本维护 | 这是本工具实现的估算口径，不能代表 Ozon 对每笔订单的最终结算金额。详细边界应通过引擎测试核对。 |
+| 俄罗斯 rFBS 物流 | [Ozon 官方费率工作簿：China scoring 24_07_26](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/China_scoring_ENG_CN_24_07_26_1784197567.xlsx) | 来源元数据标为版本 `24_07_26` / `2026-07-24`。Ozon 下载文件的 HTTP `Last-Modified` 为 `2026-07-16`（2026-09-29 查询）；本仓库目录于 `2026-11-04` 同步 | `updatedAt` 是来源版本元数据，下载文件修改时间及仓库同步日是不同日期。目录含承运商、渠道、计价参数和限制；与原始工作簿的逐项转换尚未在本开源仓库重做验证。 |
+| Ozon FBP 物流 | [Ozon 官方 FBP 服务表：24_07_26](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/FBP_List_of_services_24_07_26_1784197567.xlsx) | 来源元数据版本 `24_07_26` / `2026-07-24`；本仓库目录于 `2026-11-04` 同步 | 随附目录用于 FBP 运费估算，不代表后续政策更新。来源版本日期、下载文件修改时间和仓库同步日是不同元数据，不能互相替代。 |
+| 哈萨克斯坦、白俄罗斯、吉尔吉斯斯坦 rFBS 物流 | Ozon [合作伙伴配送说明（中国区域）](https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN)；[官方费率与时效工作簿：2026-08-20](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/%D0%A2%D0%B0%D1%80%D0%B8%D1%84%D1%8B_%D0%B8_%D1%81%D1%80%D0%BE%D0%BA%D0%B8_%D0%BE%D1%82_20.08.2026_1787209606.xlsx) | 版本日期 `2026-08-20`；于 `2026-11-04` 同步进本仓库目录；JSON 见 `server/data/pricing-logistics-catalog.json` | 目录中 126 条 CIS rFBS 商品分档与工作簿配送方式逐条对应。与 2026-07-09 表相比，物流费率公式没有变化；配送时效有更新，且哈萨克斯坦 Ural 的 Premium Small / Premium Big 申报价值上限由 ₽18,000 更新为 ₽250,000（标准与经济渠道）。1 条 KGZ Standard 服务不属于现有商品分档计算，未纳入。原始工作簿未随开源代码分发。 |
+| OGL 物流 | Ozon 官方 [OGL 资费工作簿：24_08_26](https://cdn.ozone.ru/s3/ozon-disk-api/Partner_Delivery/OGL_ENG_CN_24_08_26_added_Pick-up_1786697358.xlsx) | 版本日期 `2026-08-24`；当前目录记录 6 个 RU 商品分组；费率目录最后同步日期 `2026-11-04` | 官方表列出按克计费和最长边限制。当前共享目录另对 Big / Premium Big 使用“实际重量与体积重（长×宽×高÷12,000）取较大值”的计算规则；这一体积重除数没有在该工作簿中找到，属于尚未从这份官方表单独复核的现有实现口径。计价器只在已录入对应费率的国家展示 OGL；这不代表 Ozon 的 OGL 服务只覆盖这些国家。原工作簿未随仓库分发。 |
+| 中国邮政线路 | Ozon [合作伙伴配送说明（中国区域）](https://global-help.ozon.com/zh/fulfillment/rfbs/logistic-settings/partner-delivery-ozon/?region=CHN)；本机费率录入依据为 `China_post_29_10_26_1793258342.xlsx`（原表不在本仓库） | 工作簿文件日期 `2026-10-29`；不据此推断另行生效日期；目录最后同步日期 `2026-11-04` | 目录含 12 条路线：俄罗斯 5 条、哈萨克斯坦 2 条、白俄罗斯 2 条，以及亚美尼亚、乌兹别克斯坦、阿塞拜疆各 1 条。按基础费 + 每克费×实际包裹重量估算，不计体积重；按线路检查重量、申报货值、尺寸，以及电池和液体限制。此处快照由现有中国邮政费率目录同步；原始工作簿和可复现转换脚本未随仓库提供。CIS 工作簿未列申报货值上限时，目录保留为空值，不自行推测。 |
+| 尾程费、价格分档、尺寸/重量限制与舍入规则 | [计算引擎](./server/pricing-engine.js)；佣金和物流费率快照见本表 | 随引擎版本维护 | 这是本工具实现的估算口径，不能代表 Ozon 对每笔订单的最终结算金额。邮政实际重量计费、路线限制与当前 OGL 体积重实现由测试覆盖；详细边界见引擎测试。 |
 
 ## 可复核范围与限制
 
 - 汇率来源可由工具直接请求，接口响应中的报价日期会显示在页面。
 - 佣金与 CIS 物流的官方下载链接现已列出。仓库未附原始工作簿或转换脚本；CIS 记录已按工作簿中的配送方式逐条核对，但转换仍不能从本仓库一键复现。
-- Ozon 原始工作簿是否允许再分发尚未确认，因此开源仓库只提供官方下载链接，不提交源文件。
+- Ozon 原始工作簿是否允许再分发尚未确认，因此开源仓库只提供官方来源链接，不提交源文件。
 - 如果要把这些费率作为可复现、可审计的公开数据发布，后续应补齐原始工作簿（先确认允许再分发）和可复现的转换脚本，并把输入输出差异测试纳入 PR。当前出处与日期已公开，但数据提取过程并非完全可复现。
 
 ## 快照如何更新
 
 1. 从 Ozon 官方卖家后台或上表官方页面取得新版本原始材料，并保留文件名、有效日期与可公开访问的来源链接；先确认原始文件的再分发许可。
-2. 核对新旧版本差异，转换并更新 `server/data/` 中相应目录。
+2. 核对新旧版本差异，转换并更新 `server/data/` 中相应目录；物流数据变更时同步校验来源表的范围、单位、公式和线路限制。
 3. 更新本表的来源、版本、日期和转换说明，运行测试并在 PR 中附差异依据。
 
 如果暂时无法确认来源或生效日期，应保留旧数据并明确标注，不要推测填值，也不要用第三方文章替代官方费率来源。

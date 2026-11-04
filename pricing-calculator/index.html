@@ -9,7 +9,7 @@
   <title>Ozon 跨境定价计算器</title>
   <link rel="icon" type="image/svg+xml" href="../brand-mark.svg?v=0720-brand-k-radar-1">
   <link rel="stylesheet" href="../tools/tools.css?v=20260927-brand-1">
-  <link rel="stylesheet" href="./calculator.css?v=20260927-workbench-copy-1">
+  <link rel="stylesheet" href="./calculator.css?v=20261104-ogl-postal-1">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -63,14 +63,15 @@
                 <label class="field"><span>期望利润 <button class="pricing-help-trigger" type="button" data-pricing-help="expected-profit" aria-label="查看期望利润说明" aria-expanded="false">?</button></span><div class="pricing-input-combo"><select id="pricingCalcProfitMode" class="select" aria-label="期望利润方式"><option value="margin">百分比</option><option value="fixed">固定金额</option></select><input id="pricingCalcTargetProfit" class="input" type="number" min="0" max="1000000" step="any" value="20" aria-label="期望利润数值" required><span id="pricingCalcProfitUnit">%</span></div></label>
               </div>
               <div class="pricing-calc-row pricing-package-row">
-                <label class="field"><span>包裹重量（g） <button class="pricing-help-trigger" type="button" data-pricing-help="package-weight" aria-label="查看包裹重量说明" aria-expanded="false">?</button></span><input id="pricingCalcWeightG" class="input" type="number" min="1" max="30000" step="1" value="300" required></label>
+                <label class="field"><span>包裹重量（g） <button class="pricing-help-trigger" type="button" data-pricing-help="package-weight" aria-label="查看包裹重量说明" aria-expanded="false">?</button></span><input id="pricingCalcWeightG" class="input" type="number" min="1" max="100000" step="1" value="300" required></label>
                 <div class="pricing-dimension-group"><span class="field-label pricing-dimension-label">包裹体积 <button class="pricing-help-trigger" type="button" data-pricing-help="package-volume" aria-label="查看包裹体积说明" aria-expanded="false">?</button></span><div><label class="sr-only" for="pricingCalcLengthCm">长（cm）</label><input id="pricingCalcLengthCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="20" required><small>cm</small></div><b>×</b><div><label class="sr-only" for="pricingCalcWidthCm">宽（cm）</label><input id="pricingCalcWidthCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="20" required><small>cm</small></div><b>×</b><div><label class="sr-only" for="pricingCalcHeightCm">高（cm）</label><input id="pricingCalcHeightCm" class="input" type="number" min="0.1" max="1000" step="0.1" value="10" required><small>cm</small></div></div>
               </div>
-              <p id="pricingCalcDimensionError" class="pricing-dimension-error" role="alert" hidden></p><p id="pricingCalcInputError" class="pricing-dimension-error" role="alert" hidden></p>
+              <div id="pricingCalcPostalContentRow" class="pricing-calc-row pricing-calc-row-two pricing-postal-content-row" hidden><label class="field"><span>商品是否含电池</span><select id="pricingCalcContainsBattery" class="select"><option value="false">不含电池</option><option value="true">含电池</option></select></label><label class="field"><span>商品是否含液体</span><select id="pricingCalcContainsLiquid" class="select"><option value="false">不含液体</option><option value="true">含液体</option></select></label></div>
+              <p id="pricingCalcDimensionError" class="pricing-dimension-error" role="alert" hidden></p><p id="pricingCalcLogisticsError" class="pricing-dimension-error" role="alert" hidden></p><p id="pricingCalcInputError" class="pricing-dimension-error" role="alert" hidden></p>
             </section>
             <section class="pricing-calc-group span-4" aria-labelledby="pricingLogisticsTitle">
               <div class="pricing-calc-group-title"><span aria-hidden="true"></span><h2 id="pricingLogisticsTitle">其他设置</h2></div>
-              <div class="pricing-calc-row pricing-calc-row-two pricing-logistics-scope-row"><label class="field"><span>配送国家 <button class="pricing-help-trigger" type="button" data-pricing-help="destination-country" aria-label="查看配送国家说明" aria-expanded="false">?</button></span><select id="pricingCalcCountry" class="select"><option value="ru">俄罗斯</option><option value="kz">哈萨克斯坦</option><option value="by">白俄罗斯</option><option value="kg">吉尔吉斯斯坦</option></select></label><label class="field"><span>履约方式 <button class="pricing-help-trigger" type="button" data-pricing-help="fulfillment" aria-label="查看履约方式说明" aria-expanded="false">?</button></span><select id="pricingCalcFulfillment" class="select"><option value="rfbs">rFBS</option><option value="fbp">FBP</option></select></label></div>
+              <div class="pricing-calc-row pricing-calc-row-two pricing-logistics-scope-row"><label class="field"><span>配送国家 <button class="pricing-help-trigger" type="button" data-pricing-help="destination-country" aria-label="查看配送国家说明" aria-expanded="false">?</button></span><select id="pricingCalcCountry" class="select"><option value="ru">俄罗斯</option><option value="kz">哈萨克斯坦</option><option value="by">白俄罗斯</option><option value="kg">吉尔吉斯斯坦</option><option value="am">亚美尼亚</option><option value="uz">乌兹别克斯坦</option><option value="az">阿塞拜疆</option></select></label><label class="field"><span>履约方式 <button class="pricing-help-trigger" type="button" data-pricing-help="fulfillment" aria-label="查看履约方式说明" aria-expanded="false">?</button></span><select id="pricingCalcFulfillment" class="select"><option value="rfbs">rFBS</option><option value="fbp">FBP</option><option value="ogl">OGL</option><option value="postal">邮政</option></select></label></div>
               <div class="pricing-calc-row pricing-calc-row-two"><label class="field"><span>跨境物流商 <button class="pricing-help-trigger" type="button" data-pricing-help="logistics-provider" aria-label="查看跨境物流商说明" aria-expanded="false">?</button></span><select id="pricingCalcProvider" class="select"><option value="cel">CEL</option></select></label><label class="field"><span>物流渠道 <button class="pricing-help-trigger" type="button" data-pricing-help="logistics-channel" aria-label="查看物流渠道说明" aria-expanded="false">?</button></span><select id="pricingCalcChannel" class="select"><option value="standard">Standard 标准</option></select></label></div>
               <p id="pricingCalcLogisticsStatus" class="field-hint pricing-logistics-status" role="status" aria-live="polite">正在加载官方物流服务列表…</p>
               <div class="pricing-calc-row pricing-calc-row-three"><label class="field"><span>国内运费+代贴单（¥） <button class="pricing-help-trigger" type="button" data-pricing-help="domestic-cost" aria-label="查看国内运费加代贴单说明" aria-expanded="false">?</button></span><input id="pricingCalcDomesticCost" class="input" type="number" min="0" max="1000000" step="0.01" value="0"></label><label class="field"><span>广告费占比（%） <button class="pricing-help-trigger" type="button" data-pricing-help="advertising-rate" aria-label="查看广告费占比说明" aria-expanded="false">?</button></span><input id="pricingCalcPromoRate" class="input" type="number" min="0" max="80" step="0.5" value="0"></label><label class="field"><span>其他成本（%） <button class="pricing-help-trigger" type="button" data-pricing-help="other-cost" aria-label="查看其他成本说明" aria-expanded="false">?</button></span><input id="pricingCalcOtherCost" class="input" type="number" min="0" max="80" step="0.01" value="1.2"></label></div>
@@ -94,12 +95,12 @@
       </div>
       <div><b>产品与指南</b><a href="https://kuakuakua.com/about.html">关于夸夸跨境</a><a href="https://kuakuakua.com/about.html#features">核心功能</a><a href="https://kuakuakua.com/about.html#pricing">会员方案</a><a href="https://ozon.kuakuakua.com/">工作台入口</a><a href="https://kuakuakua.com/guides/">Ozon 实用指南</a><a href="https://kuakuakua.com/guides/ozon-api-keys.html">API 授权说明</a></div>
       <div><b>支持</b><a href="mailto:support@kuakuakua.com">邮件支持</a><a href="https://ozon.kuakuakua.com/terms.html">用户服务协议</a><a href="https://ozon.kuakuakua.com/privacy.html">隐私政策</a></div>
-      <div><b>工具</b><a href="/pricing-calculator/">Ozon 跨境定价计算器</a><span>覆盖 rFBS、FBP 与俄罗斯及独联体市场</span></div>
+      <div><b>工具</b><a href="/pricing-calculator/">Ozon 跨境定价计算器</a><span>包含 rFBS、FBP、OGL 与中国邮政费率快照</span></div>
     </div>
     <div class="container copyright"><span>© 2026 KuaKuaKua. 保留所有权利。</span></div>
   </footer>
 
   <script src="../tools/tools.js" defer></script>
-  <script src="./calculator.js?v=20260927-workbench-copy-2" defer></script>
+  <script src="./calculator.js?v=20261104-ogl-postal-1" defer></script>
 </body>
 </html>
